@@ -1,0 +1,237 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui" 
+      xmlns:pm="http://primefaces.org/mobile"
+      >
+
+    <h:body>
+
+                <ui:composition template="./../menuTemplate.xhtml">
+                    <ui:define name="contents">
+                        <p:growl id="msgs" showDetail="true" />
+
+                        <h:form id="formProveedores">    
+
+                            <p:dataTable id="proveedores" var="prov" value="#{proveedorBean.proveedores}"
+                                         paginator="true" rows="50" paginatorPosition="bottom"                                   
+                                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                         rowsPerPageTemplate="5,10,15" 
+                                         style="border: none; padding-left: 30px; padding-right: 30px; padding-top: 15px; width: auto; column-rule-width: calc;
+                                         margin-right: auto; margin-left: auto; text-align: center; font-family: Segoe UI Light; font-size: 15px;"> 
+                                <f:facet name="header"> Proveedores </f:facet> 
+
+                                <p:column headerText="Proveedor" style="width: 15%;"
+                                          filterBy="#{prov.proIdProveedor}"  
+                                          filterMatchMode="contains">  
+                                    <h:outputText value="#{prov.proIdProveedor}" />  
+                                </p:column>  
+
+                                <p:column headerText="Correos Destinatarios" filterBy="#{prov.provCorreo}" style="width: 20%;;"
+                                          filterMatchMode="contains"> 
+                                    <h:outputText value="#{prov.proCorreo}" />  
+                                </p:column>  
+
+                                <p:column headerText="Contacto CallCenter"> 
+                                    <h:outputText value="#{prov.proContacto1}" />  
+                                </p:column>  
+
+
+                                <p:column headerText="Contacto Secundario"> 
+                                    <h:outputText value="#{prov.proContacto2}" />  
+                                </p:column>  
+
+                                <p:column headerText="Escalamiento Primer Nivel"> 
+                                    <h:outputText value="#{prov.proEscalamiento1}" />  
+                                </p:column>  
+
+                                <p:column headerText="Escalamiento Segundo Nivel"> 
+                                    <h:outputText value="#{prov.proEscalamiento2}" />  
+                                </p:column>  
+
+                                <p:column headerText="Escalamiento Tercer Nivel"> 
+                                    <h:outputText value="#{prov.proEscalamiento3}" />  
+                                </p:column>  
+
+                                <p:column headerText="Escalamiento Cuarto Nivel"> 
+                                    <h:outputText value="#{prov.proEscalamiento4}" />  
+                                </p:column>                          
+
+
+                                <p:column headerText="Acciones" style="width: 10%"> 
+                                    <p:commandButton id="btnActualizProv" update=":formActualizarProveedor" title="Actualizar"
+                                                     oncomplete="PF('actProvDialog').show()"
+                                                     icon="ui-icon-pencil">
+                                        <f:setPropertyActionListener value="#{prov}" 
+                                                                     target="#{proveedorBean.proveedorSeleccionado}" />  
+                                    </p:commandButton>
+
+                                    <p:commandButton id="btnElimProv" update=":formEliminarProveedor" title="Eliminar"
+                                                     oncomplete="PF('elimProvDialog').show()"
+                                                     icon="ui-icon-trash">
+                                        <f:setPropertyActionListener value="#{prov}" 
+                                                                     target="#{proveedorBean.proveedorSeleccionado}" />  
+                                    </p:commandButton>
+
+
+                                </p:column>
+
+                            </p:dataTable> 
+
+
+                            <p:commandButton id="btnRegistrarProv" update=":formRegistrarProveedor" value="Registrar Proveedor"
+                                             oncomplete="PF('regProvDialog').show()" style="margin-top: 1%; margin-left: -6%;"
+                                             icon="ui-icon-circle-plus" title="Registrar"/>  
+
+                        </h:form> 
+
+                        <h:form id="formRegistrarProveedor"> 
+                            <p:dialog header="Registrar Proveedor" widgetVar="regProvDialog" resizable="false" id="dlgRegFarmacia" style="font-family: Segoe UI; font-size: 16px;" 
+                                      showEffect="fade" hideEffect="explode" modal="true">  
+
+                                <h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">                           
+
+                                    <p:outputLabel value="Nombre del Proveedor *" />  
+                                    <p:inputText value="#{proveedorBean.proveedorSeleccionado.proIdProveedor}"
+                                                 required="true"
+                                                 requiredMessage="Se requiere el nombre de la farmacia!"/>  
+
+                                    <h:outputText value="Correos Destinatarios *" />  
+                                    <p:inputTextarea value="#{proveedorBean.proveedorSeleccionado.proCorreo}"
+                                                     required="true"
+                                                     requiredMessage="Se requiere el identificador!"/>  
+
+                                    <h:outputText value="Contacto CallCenter *" />  
+                                    <p:inputText value="#{proveedorBean.proveedorSeleccionado.proContacto1}"
+                                                 required="true"
+                                                 requiredMessage="Se requiere Contacto CallCenter!"/>  
+
+                                    <h:outputText value="Contacto Secundario" />  
+                                    <p:inputText value="#{proveedorBean.proveedorSeleccionado.proContacto2}"
+                                                 />  
+
+                                    <h:outputText value="Escalamiento 1 *" />  
+                                    <p:inputText value="#{proveedorBean.proveedorSeleccionado.proEscalamiento1}"
+                                                 required="true"
+                                                 requiredMessage="Se requiere Contacto Escalamiento 1!"/>  
+
+                                    <h:outputText value="Escalamiento 2 *" />  
+                                    <p:inputText value="#{proveedorBean.proveedorSeleccionado.proEscalamiento2}"
+                                                 required="true"
+                                                 requiredMessage="Se requiere Contacto Escalamiento 2!"/>  
+
+                                    <h:outputText value="Escalamiento 3" />  
+                                    <p:inputText value="#{proveedorBean.proveedorSeleccionado.proEscalamiento3}"
+                                                 />  
+
+                                    <h:outputText value="Escalamiento 4" />  
+                                    <p:inputText value="#{proveedorBean.proveedorSeleccionado.proEscalamiento4}"
+                                                 />  
+
+                                    
+                                    
+
+                                    <f:facet name="footer">
+                                        <p:separator/>
+                                        <p:commandButton id="btnConfirmRegProv" update=":formProveedores, :msgs" 
+                                                         icon="ui-icon-disk" 
+                                                         actionListener="#{proveedorBean.btnRegistrarProveedor(actionEvent)}"
+                                                         oncomplete="PF('regProvDialog').hide()"
+                                                         title="Guardar" value="Guardar"
+                                                         />
+                                        <p:commandButton id="btnCancelRegFar" oncomplete="PF('regProvDialog').hide()"
+                                                         icon="ui-icon-close" title="Cerrar" value="Cerrar"/>
+                                        <h:outputLabel> * Campos requeridos</h:outputLabel>
+                                    </f:facet>
+                                </h:panelGrid>  
+
+                            </p:dialog>  
+                        </h:form>  
+
+
+                        <h:form id="formActualizarProveedor"> 
+                            <p:dialog header="Actualizar Proveedor" widgetVar="actProvDialog" resizable="false" id="dlgActProveedor" style="font-family: Segoe UI; font-size: 16px;"
+                                      showEffect="fade" hideEffect="explode" modal="true">  
+
+                                <h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;" 
+                                             rendered="#{not empty farmaciaBean.farmaciaSeleccionada}" columnClasses="label,value">                           
+
+                                    <p:outputLabel value="Nombre del Proveedor *" />                             
+                                    <p:inputText value="#{proveedorBean.proveedorSeleccionado.proIdProveedor}"/>  
+
+                                    <h:outputText value="Correos Destinatarios *" />  
+                                    <p:inputTextarea value="#{proveedorBean.proveedorSeleccionado.proCorreo}"
+                                                     required="true"
+                                                     requiredMessage="Se requiere el correo!"/>  
+
+                                    <h:outputText value="Contacto CallCenter *" />  
+                                    <p:inputText value="#{proveedorBean.proveedorSeleccionado.proContacto1}"
+                                                 required="true"
+                                                 requiredMessage="Se requiere Contacto CallCenter!"/>  
+
+                                    <h:outputText value="Contacto Secundario" />  
+                                    <p:inputText value="#{proveedorBean.proveedorSeleccionado.proContacto2}"
+                                                 />  
+
+                                    <h:outputText value="Escalamiento 1" />  
+                                    <p:inputText value="#{proveedorBean.proveedorSeleccionado.proEscalamiento1}"
+                                                 required="true"
+                                                 requiredMessage="Se requiere Contacto Escalamiento 1!"/>  
+
+                                    <h:outputText value="Escalamiento 2" />  
+                                    <p:inputText value="#{proveedorBean.proveedorSeleccionado.proEscalamiento2}"
+                                                 required="true"
+                                                 requiredMessage="Se requiere Contacto Escalamiento 2!"/>  
+
+                                    <h:outputText value="Escalamiento 3" />  
+                                    <p:inputText value="#{proveedorBean.proveedorSeleccionado.proEscalamiento3}"
+                                                 />  
+
+                                    <h:outputText value="Escalamiento 4" />  
+                                    <p:inputText value="#{proveedorBean.proveedorSeleccionado.proEscalamiento4}"
+                                                 />  
+
+
+                                    <f:facet name="footer">
+                                        <p:separator/>
+                                        <p:commandButton id="btnConfirmActFar" update=":formProveedores, :msgs" 
+                                                         icon="ui-icon-disk" 
+                                                         actionListener="#{proveedorBean.btnActualizarProveedor(actionEvent)}"
+                                                         oncomplete="PF('actProvDialog').hide()"
+                                                         title="Guardar" value="Guardar"
+                                                         />
+                                        <p:commandButton id="btnCancelActFar" oncomplete="PF('actProvDialog').hide()"
+                                                         icon="ui-icon-close" title="Cerrar" value="Cerrar"/>
+                                        <h:outputLabel> * Campos requeridos</h:outputLabel>
+                                    </f:facet>
+                                </h:panelGrid>  
+
+                            </p:dialog>  
+                        </h:form>  
+
+
+                        <h:form id="formEliminarProveedor">      
+                            <p:confirmDialog id="confirmDialog" widgetVar="elimProvDialog" style="font-family: Segoe UI; font-size: 16px;"
+                                             message="¿Eliminar Proveedor: #{proveedorBean.proveedorSeleccionado.proIdProveedor}?" 
+                                             showEffect="fade" hideEffect="explode"
+                                             header="Eliminar Proveedor" severity="alert">
+                                <h:inputHidden value="#{proveedorBean.proveedorSeleccionado.proIdProveedor}"/>                       
+                                <p:commandButton id="confirm" value="Aceptar" update=":formProveedores, :msgs" style="alignment-adjust: middle"                                       
+                                                 actionListener="#{proveedorBean.btnEliminarProveedor(actionEvent)}"
+                                                 oncomplete="PF('elimProvDialog').hide()"
+                                                 icon="ui-icon-check"/>
+                                <p:commandButton id="btnCancelElim" oncomplete="PF('elimProvDialog').hide()" 
+                                                 icon="ui-icon-close" title="Cerrar" value="Cerrar"/>
+
+                            </p:confirmDialog>
+                        </h:form>          
+
+
+                    </ui:define>
+
+                </ui:composition>
+    </h:body>
+</html>

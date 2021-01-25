@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pm="http://primefaces.org/mobile">
+
+    <body>
+
+        <ui:composition template="./../menuTemplate.xhtml">
+
+            <ui:define name="contents">
+                <p:growl id="msgs" showDetail="true"/>
+
+                <h:form id="formReportadas">    
+
+                    <p:dataTable id="reportadas" var="rep" value="#{reportadasBean.reportadas}" 
+                                 paginator="true" rows="30" widgetVar="farms" styleClass="conteiner" reflow="true"            
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                 rowsPerPageTemplate="30,50,100"  currentPageReportTemplate="Total de resultados: {totalRecords}"
+                                 style="border: 1; padding-left: 30px; padding-right: 30px; padding-top: 15px; width: auto;
+                                 margin-right: auto; margin-left: auto; text-align: center; border-radius: 0%; font-family: Segoe UI Light; font-size: 15px;
+                                 border-color: red;">             
+
+                        <f:facet name="header"> Top Farmacias Reportadas </f:facet>       
+
+                        <p:column headerText="Farmacia"
+                                  filterBy="#{rep.numeroReportes}"  
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{rep.numeroReportes}" />  
+                        </p:column>  
+
+                        <p:column headerText="Número de Reportes"
+                                  filterBy="#{rep.idFarmacia}"  
+                                  filterMatchMode="contains"> 
+                            <h:outputText value="#{rep.idFarmacia}" />  
+                        </p:column>  
+
+                    </p:dataTable> 
+                </h:form> 
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pm="http://primefaces.org/mobile">
+
+    <f:view renderKitId="PRIMEFACES_MOBILE" />
+
+    <h:head>
+        <link type="text/css" rel="stylesheet" href="#{request.contextPath}/css/syntaxhighlighter/syntaxhighlighter.css" />
+    </h:head>
+
+    <h:body>
+        <p:growl id="msgs" showDetail="true"/>
+        <h:form id="formFarmacias">
+
+            <p:dataGrid id="farms" var="farmacia" value="#{farmaciaBean.farmacias}" columns="3" paginator="true" rows="9">
+                <f:facet name="header">
+                    Farmacias
+                </f:facet>
+
+                <p:panel header="#{farmacia.farIdFarmacia}" style="text-align:center">
+                    <h:panelGrid columns="1" style="width:100%">                       
+                        <h:outputText value="#{farmacia.farPiloto}" />
+                        <h:outputText value="#{farmacia.farTelfCelular}" />
+                        <h:outputText value="#{farmacia.farIp}" />
+
+                        <p:commandButton update="@form:carDetail" onclick="PF('carDialog').show()" icon="ui-icon-search" styleClass="ui-btn-inline">
+                            <h:outputText styleClass="ui-icon ui-icon-search" style="margin:0 auto;" />
+                            <f:setPropertyActionListener value="#{farmacia}" target="#{farmaciaBean.farmaciaSeleccionada}" />
+                        </p:commandButton>
+
+                        <p:commandButton id="btnDownDevice"  title="Reportar Enlace Caído"
+                                         onclick="PF('downDeviceDialog').show()"
+                                         icon="ui-icon-arrowthick-1-s">
+                            <f:setPropertyActionListener value="#{far}" 
+                                                         target="#{farmaciaBean.farmaciaSeleccionada}" />  
+                        </p:commandButton>
+                    </h:panelGrid>
+                </p:panel>
+
+            </p:dataGrid>
+
+            <p:dialog id="confirmDialog" widgetVar="downDeviceDialog" style="font-family: Segoe UI; font-size: 15px;"                             
+                      showEffect="pop" hideEffect="explode" modal="true"
+                      header="Reportar Enlace Caído"  >
+                <p:outputPanel id="caido">
+                    <p:panelGrid  columns="2" rendered="#{not empty farmaciaBean.farmaciaSeleccionada}">
+                        <p:commandButton id="confirm" value="Aceptar" update=":formFarmacias, :msgs" style="font-family: Segoe UI Light;"                                     
+                                         actionListener="#{farmaciaBean.sendMailCaidos(event)}"
+                                         onclick="PF('downDeviceDialog').hide()"
+                                         icon="ui-icon-check"/>
+                        <p:commandButton id="btnCancelDown" onclick="PF('downDeviceDialog').hide()" style="font-family: Segoe UI Light;"
+                                         icon="ui-icon-close" title="Cerrar" value="Cerrar"/>
+                        </p:panelGrid>
+                </p:outputPanel>
+            </p:dialog>
+
+
+            <p:dialog header="Información de Farmacia" widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="true">
+                <p:outputPanel id="carDetail">
+                    <p:panelGrid  columns="2" rendered="#{not empty farmaciaBean.farmaciaSeleccionada}">
+
+                        <h:outputText value="Nombre" />
+                        <h:outputText value="#{farmaciaBean.farmaciaSeleccionada.farIdFarmacia}" />
+
+                        <h:outputText value="Identificador" />
+                        <h:outputText value="#{farmaciaBean.farmaciaSeleccionada.farPiloto}" />
+
+                        <h:outputText value="IP" />
+                        <h:outputText value="#{farmaciaBean.farmaciaSeleccionada.farIp}"/>
+
+                        <h:outputText value="Contacto" />
+                        <h:outputText value="#{farmaciaBean.farmaciaSeleccionada.farTelfCelular}" />
+
+                        <h:outputText value="Proveedor" />
+                        <h:outputText value="#{farmaciaBean.farmaciaSeleccionada.ttProveedor.proIdProveedor}" />
+
+                    </p:panelGrid>
+                </p:outputPanel>
+            </p:dialog>
+
+        </h:form>
+
+    </h:body>
+
+</html>

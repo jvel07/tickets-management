@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+        <h:outputStylesheet name="./css/all.css"/>
+        <link href="css/all.css" type="text/css" rel="stylesheet" media="all"></link>
+        <title>Reporte de Enlaces Caídos</title>
+    </h:head>
+
+    <h:body>
+        <div id="wrapper">
+            <div id="header">
+                <div class="header-block" style="font-family: inherit; font-size: 150%">
+                    <h:graphicImage url="/resources/images/logoGV.png" />
+                </div>
+            </div>
+        </div>
+    </h:body>
+
+    <h:body>
+        <div id="conteiner">
+            <div>
+                <h:form id="formMenu">  
+
+                    <p:menubar style="border-color: white; border-radius: 0%;">
+                        <p:menuitem style=" font-family: Segoe UI Light;  width: 150px; font-size: 16px;" 
+                                    value="Enlaces de Datos" outcome="/menuPrincipal/farmacia" icon="ui-icon-transferthick-e-w" />
+                        <p:menuitem style=" font-family: Segoe UI Light; width: 120px; font-size: 16px;" 
+                                    value="Proveedores" outcome="/menuPrincipal/proveedor" icon="ui-icon-bookmark"/>
+                        <p:menuitem style=" font-family: Segoe UI Light; width: 80px; font-size: 16px;" 
+                                    value="Tickets" outcome="/menuPrincipal/ticket" icon="ui-icon-contact"/>
+                        
+                        <p:menuitem style=" font-family: Segoe UI Light; width: 100px; font-size: 16px;" 
+                                    value="Responsive" outcome="/menuPrincipal/responsive2" icon="ui-icon"/>
+                        <p:menuitem style=" font-family: Segoe UI Light; width: 70px; font-size: 16px;"  
+                                    value="Salir" outcome="/login" icon="ui-icon-power" actionListener="#{loginBean.logOut}"/>
+                    </p:menubar>
+
+                </h:form>
+            </div>
+
+            <div id="contents" style="vertical-align: auto">
+                <ui:insert name="contents">  </ui:insert>
+            </div>
+
+            <div id="bottom">
+                <ui:insert name="bottom">José Vicente Egas López, Reporte de Enlaces Caídos &copy; 2015 Versión 1.5</ui:insert>
+            </div>
+
+        </div>
+
+        <script type="text/javascript">
+            function handleLoginRequest(xhr, status, args) {
+                if (args.loggedOut) {
+                    location.href = args.ruta;
+                }
+            }
+        </script>  
+
+    </h:body>
+
+</html>

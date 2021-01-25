@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pm="http://primefaces.org/mobile">
+
+    <f:view renderKitId="PRIMEFACES_MOBILE" />
+
+    <h:head>
+        <link type="text/css" rel="stylesheet" href="#{request.contextPath}/css/syntaxhighlighter/syntaxhighlighter.css" />
+    </h:head>
+
+    <h:body>
+        <p:growl id="msgs" showDetail="true"/>
+        <pm:page id="list">
+            <pm:header title="Enlaces de Datos" swatch="b">
+                <p:button styleClass="ui-btn-right ui-btn-inline" value="Registrar Farmacia" icon="ui-icon-plus" outcome="pm:regFarmacia?transition=slide" />
+            </pm:header>
+
+            <pm:content>
+                <h:form id="listForm">
+
+                    <p:dataList id="listaFarmacias" value="#{farmaciaBean.farmacias}" var="farmacia" pt:data-inset="true"
+                                paginator="true" rows="50">
+
+                        <p:commandButton value="Sin enlace" onclick="PF('downDeviceDialog').show()">
+                            <h2>#{farmacia.farIdFarmacia}</h2>
+                            <p>#{farmacia.farPiloto}</p>
+                            <p>#{farmacia.farTelfCelular}</p>
+                            <p class="ui-li-aside"><strong>#{farmacia.ttProveedor.proIdProveedor}</strong></p>
+                            <f:setPropertyActionListener value="#{farmacia}" 
+                                                         target="#{farmaciaBean.farmaciaSeleccionada}" />  
+                        </p:commandButton>
+
+                        <p:commandButton value="Intermitencia" onclick="PF('downDeviceDialog').show()">
+                            <f:setPropertyActionListener value="#{farmacia}" 
+                                                         target="#{farmaciaBean.farmaciaSeleccionada}" />  
+                        </p:commandButton>
+
+
+
+                    </p:dataList>
+
+                    <p:confirmDialog id="confirmDialog" widgetVar="downDeviceDialog" style="font-family: Segoe UI Light; font-size: 15px;"
+                                     header="Sin enlace:#{farmaciaBean.farmaciaSeleccionada.farIdFarmacia}" showEffect="fade" hideEffect="explode" >
+
+                        <p:commandButton id="confirmDown" value="Enviar" style="font-family: Segoe UI Light;"                                     
+                                         action="#{farmaciaBean.sendMailCaidos(event)}"  oncomplete="PF('downDeviceDialog').hide()" update="msgs"  
+                                         icon="ui-icon-check"/>
+                        <p:commandButton id="btnCancelDown" oncomplete="PF('downDeviceDialog').hide()" style="font-family: Segoe UI;"
+                                         icon="ui-icon-close" title="Cancelar" value="Cancelar"/>
+                    </p:confirmDialog>
+
+
+                    <p:confirmDialog id="intermitencia" widgetVar="downDeviceDialog" style="font-family: Segoe UI Light; font-size: 15px;"
+                                     header="Intermitencia: #{farmaciaBean.farmaciaSeleccionada.farIdFarmacia}" showEffect="fade" hideEffect="explode" >
+
+                        <p:commandButton id="confirmInterm" value="Enviar" oncomplete="PF('downDeviceDialog').hide()" update="msgs" style="font-family: Segoe UI Light;"                                     
+                                         action="#{farmaciaBean.sendMailIntermitentes(event)}" 
+                                         icon="ui-icon-check"/>
+                        <p:commandButton id="btnCancelInterm" oncomplete="PF('downDeviceDialog').hide()" style="font-family: Segoe UI;"
+                                         icon="ui-icon-close" title="Cancelar" value="Cancelar"/>
+                    </p:confirmDialog>
+
+                </h:form>
+
+            </pm:content>
+
+
+
+        </pm:page>
+
+
+        <pm:page id="reportarIncidencias">
+            <pm:header title="Reportar Incidencias" swatch="b">
+                <p:button styleClass="ui-btn-left ui-btn-inline" value="Regresar" icon="ui-icon-arrow-l" outcome="pm:list?transition=flip"/>
+            </pm:header>
+
+            <pm:content>
+                <h:form id="editForm">
+                    <p:outputPanel id="editFormPanel" rendered="#{not empty farmaciaBean.farmaciaSeleccionada}">
+
+                        <pm:field>
+                            <p:outputLabel value="Nombre de Farmacia *"/>  
+                            <p:inputText value="#{farmaciaBean.farmaciaSeleccionada.farIdFarmacia}"
+                                         required="true"
+                                         requiredMessage="Se requiere el nombre de la farmacia!"/>  
+                        </pm:field>
+
+                        <pm:field>
+                            <h:outputText value="Identificador *" />  
+                            <p:inputTextarea value="#{farmaciaBean.farmaciaSeleccionada.farPiloto}"
+                                             rows="2" cols="25"
+                                             required="true"
+                                             requiredMessage="Se requiere el identificador!"/>  
+                        </pm:field>
+
+                        <pm:field>
+                            <h:outputText value="Ip Gateway *" />  
+                            <p:inputText value="#{farmaciaBean.farmaciaSeleccionada.farIp}"
+                                         required="true"
+                                         requiredMessage="Se requiere la dirección IP!"/>  
+                        </pm:field>
+
+                        <pm:field>
+                            <h:outputText value="Proveedor *" />  
+                            <p:selectOneMenu value="#{farmaciaBean.farmaciaSeleccionada.ttProveedor.proIdProveedor}" 
+                                             effect="fold" required="true" requiredMessage="Elige un proveedor para la farmacia!">  
+                                <f:selectItem itemLabel="Seleccionar" itemValue="" />  
+                                <f:selectItems value="#{proveedorBean.seleccionarProveedor}" />  
+                            </p:selectOneMenu>  
+                        </pm:field>
+
+                        <pm:field>
+                            <h:outputText value="Telf. Celular *" />  
+                            <p:inputTextarea value="#{farmaciaBean.farmaciaSeleccionada.farTelfCelular}"
+                                             rows="2" cols="25"
+                                             required="true"
+                                             requiredMessage="Se requiere al menos un teléfono celular de contacto!"/>  
+                        </pm:field>
+
+                        <pm:field>
+                            <h:outputText value="Telf. Convencional" />  
+                            <p:inputTextarea value="#{farmaciaBean.farmaciaSeleccionada.farTelfConvencional}"
+                                             rows="2" cols="25"/>  
+                        </pm:field>
+
+                    </p:outputPanel>
+
+
+                    <p:commandButton value="Save" action="#{farmaciaBean.btnRegistrarFarmacia(actionEvent)}"  icon="ui-icon-check"
+                                     update="msgs"/>
+                </h:form>
+
+            </pm:content>
+        </pm:page>
+
+
+
+        <pm:page id="regFarmacia">
+            <pm:header title="Registrar Farmacia" swatch="b">
+                <p:button styleClass="ui-btn-left ui-btn-inline" value="Regresar" icon="ui-icon-arrow-l" outcome="pm:list?transition=flip"/>
+            </pm:header>
+
+            <pm:content>
+                <h:form id="editForm">
+                    <p:outputPanel id="editFormPanel">
+                        <pm:field>
+                            <p:outputLabel value="Nombre de Farmacia *"/>  
+                            <p:inputText value="#{farmaciaBean.farmaciaSeleccionada.farIdFarmacia}"
+                                         required="true"
+                                         requiredMessage="Se requiere el nombre de la farmacia!"/>  
+                        </pm:field>
+
+                        <pm:field>
+                            <h:outputText value="Identificador *" />  
+                            <p:inputTextarea value="#{farmaciaBean.farmaciaSeleccionada.farPiloto}"
+                                             rows="2" cols="25"
+                                             required="true"
+                                             requiredMessage="Se requiere el identificador!"/>  
+                        </pm:field>
+
+                        <pm:field>
+                            <h:outputText value="Ip Gateway *" />  
+                            <p:inputText value="#{farmaciaBean.farmaciaSeleccionada.farIp}"
+                                         required="true"
+                                         requiredMessage="Se requiere la dirección IP!"/>  
+                        </pm:field>
+
+                        <pm:field>
+                            <h:outputText value="Proveedor *" />  
+                            <p:selectOneMenu value="#{farmaciaBean.farmaciaSeleccionada.ttProveedor.proIdProveedor}" 
+                                             effect="fold" required="true" requiredMessage="Elige un proveedor para la farmacia!">  
+                                <f:selectItem itemLabel="Seleccionar" itemValue="" />  
+                                <f:selectItems value="#{proveedorBean.seleccionarProveedor}" />  
+                            </p:selectOneMenu>  
+                        </pm:field>
+
+                        <pm:field>
+                            <h:outputText value="Telf. Celular *" />  
+                            <p:inputTextarea value="#{farmaciaBean.farmaciaSeleccionada.farTelfCelular}"
+                                             rows="2" cols="25"
+                                             required="true"
+                                             requiredMessage="Se requiere al menos un teléfono celular de contacto!"/>  
+                        </pm:field>
+
+                        <pm:field>
+                            <h:outputText value="Telf. Convencional" />  
+                            <p:inputTextarea value="#{farmaciaBean.farmaciaSeleccionada.farTelfConvencional}"
+                                             rows="2" cols="25"/>  
+                        </pm:field>
+                    </p:outputPanel>
+
+
+                    <p:commandButton value="Save" action="#{farmaciaBean.btnRegistrarFarmacia(actionEvent)}"  icon="ui-icon-check"
+                                     update="msgs"/>
+                </h:form>
+
+            </pm:content>
+        </pm:page>
+
+        <script language="javascript" src="#{request.contextPath}/syntaxhighlighter/scripts/sh.js"></script>
+        <script language="javascript">
+                            SyntaxHighlighter.all();
+        </script>
+    </h:body>
+
+</html>

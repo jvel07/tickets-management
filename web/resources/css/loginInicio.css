@@ -1,0 +1,161 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Apr 22, 2015, 9:51:45 AM
+    Author     : Jose
+*/
+
+.contenedor{
+    margin: 80px auto;
+    
+    width: 980px;
+    float: left;
+
+}
+
+.panel{
+  
+    margin-left: -200px;
+    margin-top: 220px;
+    float: left;
+}
+
+.logo-sistema{
+    margin-top: 60px;
+    margin-left: 190px;
+    float: left;
+}
+
+.logo-farma{   
+    width: 230px;
+    margin-top: 500px;
+    margin-right: 200px;  
+    float: left;
+ 
+}
+
+.login_button{
+
+    display: inline-block;
+    padding: 3px 50px;
+    margin-bottom: 0;
+    font-size: 17px;
+    font-weight: normal;
+    line-height: 1.42857143;
+    text-align: justify;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;    
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    border-color: #46b8da;
+    background-color: #ffffff;
+    margin-top: 20%;
+    margin-left: 10%;   
+    font-family: Segoe UI;
+    text-justify: auto;
+
+
+
+
+
+    ////
+    /*    font-family: sans-serif;
+        font-size: 20%;
+        color: #000;
+        background-color: #ffffff;
+        border-color: #46b8da;
+        margin-left: 22%;
+        margin-right: auto;
+        margin-top: 5%;
+        width: 55%;   */
+
+}
+
+@media screen and (max-width:761px) {
+    .contenedor{       
+        width: 80%;
+    }
+
+    .panel{
+        margin-left: 0px;
+        width: 100%;
+    }
+
+    .logo-sistema{
+        margin-left: -5px;
+        width: 110%;
+    }
+    .logo-farma{
+        width: 100%;
+    }
+    .login_button{
+        width: 80%;            
+    }    
+    img{
+        width: 80%;
+    }
+}
+
+
+@media screen and (max-width: 960px){
+    .contenedor{       
+        width: 80%;
+    }
+
+    .panel{
+        margin-left: 0px;
+        width: 100%;
+    }
+
+    .logo-sistema{
+        margin-left: -5px;
+        width: 110%;
+    }
+    .logo-farma{
+        width: 100%;
+    }
+    .login_button{
+        width: 80%;            
+    }    
+    img{
+        width: 80%;
+    }
+}
+
+@media screen and (max-width: 640px){
+    .contenedor{       
+        width: 100%;
+    }
+
+    .panel{
+        margin-top: 20px;
+        margin-left: 0px;
+        width: 100%;
+    }
+
+    .logo-sistema{
+        margin-left: -5px;
+        width: 110%;
+    }
+    .logo-farma{
+        margin-top: 50px;
+        width: 100%;
+    }
+    .login_button{
+        width: 80%;            
+    }    
+    img{
+        
+        width: 100%;
+    }
+}
+
+

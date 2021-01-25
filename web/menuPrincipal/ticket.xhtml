@@ -1,0 +1,239 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+        <ui:composition template="./../menuTemplate.xhtml">
+            <ui:define name="contents">
+                <p:growl id="msgs" showDetail="true" />
+
+                <h:form id="formTickets">    
+
+                    <p:dataTable id="tickets" var="ticket" value="#{ticketBean.tickets}"
+                                 paginator="true" rows="50" paginatorPosition="bottom"                                   
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                 rowsPerPageTemplate="5,10,15" currentPageReportTemplate="Total de resultados: {totalRecords}"
+                                 style="border: none; padding-left: 30px; padding-right: 30px; padding-top: 15px; width: auto; column-rule-width: calc;
+                                 margin-right: auto; margin-left: auto; text-align: center; font-family: Segoe UI; font-size: 15px;"> 
+                        <f:facet name="header"> Tickets </f:facet> 
+
+                        <p:column headerText="Ticket" style="width: auto"
+                                  filterBy="#{ticket.ttNumeroTicket}"  
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{ticket.ttNumeroTicket}" />  
+                        </p:column>  
+
+                        <p:column headerText="Farmacia" filterBy="#{ticket.ttFarmacia.farIdFarmacia}"
+                                  filterMatchMode="contains"> 
+                            <h:outputText value="#{ticket.ttFarmacia.farIdFarmacia}" />  
+                        </p:column>  
+
+                        <p:column headerText="Fecha de Apertura TT"
+                                  filterBy="#{ticket.ttFechaReporte}"
+                                  filterMatchMode="contains"
+                                  > 
+                            <h:outputText value="#{ticket.ttFechaReporte}" />  
+                        </p:column>  
+
+
+                        <p:column headerText="Estado TT" filterBy="#{ticket.ttEstado}"
+                                  filterMatchMode="contains"> 
+                            <h:outputText value="#{ticket.ttEstado}" />  
+                        </p:column>  
+
+                        <p:column headerText="Fecha de Cierre"
+                                  filterBy="#{ticket.ttFechaCierre}"
+                                  filterMatchMode="contains"> 
+                            <h:outputText value="#{ticket.ttFechaCierre}" />  
+                        </p:column>  
+
+                        <p:column headerText="Observaciones"
+                                  filterBy="#{ticket.ttObservaciones}"
+                                  filterMatchMode="contains"> 
+                            <h:outputText value="#{ticket.ttObservaciones}" />  
+                        </p:column>  
+
+                        <p:column headerText="Proveedor"
+                                  filterBy="#{ticket.ttFarmacia.ttProveedor.proIdProveedor}"
+                                  filterMatchMode="contains"
+                                  > 
+                            <h:outputText value="#{ticket.ttFarmacia.ttProveedor.proIdProveedor}" />  
+                        </p:column>  
+
+                        <p:column headerText="Operador que reporta"
+                                  filterBy="#{ticket.ttUsuarioReporte}"
+                                  filterMatchMode="contains"
+                                  > 
+                            <h:outputText value="#{ticket.ttUsuarioReporte}" />  
+                        </p:column>                   
+
+
+                        <p:column headerText="Acciones"> 
+                            <p:commandButton id="btnActualizTT" update=":formActualizarTT" title="Actualizar"
+                                             oncomplete="PF('actTTDialog').show()"
+                                             icon="ui-icon-pencil">
+                                <f:setPropertyActionListener value="#{ticket}" 
+                                                             target="#{ticketBean.ticketSeleccionado}" />  
+                            </p:commandButton>
+
+                            <p:commandButton id="btnElimProv" update=":formEliminarTT" title="Eliminar"
+                                             oncomplete="PF('elimTTDialog').show()"
+                                             icon="ui-icon-trash">
+                                <f:setPropertyActionListener value="#{ticket}" 
+                                                             target="#{ticketBean.ticketSeleccionado}" />  
+                            </p:commandButton>
+
+                            <p:commandButton id="btnCerrarTT" update=":formCerrarTT" title="Cerrar Ticket"
+                                             oncomplete="PF('cerrarTTDialog').show()"
+                                             icon="ui-icon-clock">
+                                <f:setPropertyActionListener value="#{ticket}" 
+                                                             target="#{ticketBean.ticketSeleccionado}" />  
+                            </p:commandButton>
+
+                        </p:column>
+
+                    </p:dataTable> 
+
+                    <p:commandButton id="btnRegistrarTT" update=":formRegistrarTT" value="Registrar Ticket"
+                                     oncomplete="PF('regTTDialog').show()" style="margin-top: 1%; margin-left: -6%;"
+                                     icon="ui-icon-circle-plus" title="Registrar"/>  
+                    <h:outputLabel> True: Ticket Abierto; False: Ticket Cerrado</h:outputLabel>                  
+                </h:form> 
+
+
+                <h:form id="formRegistrarTT"> 
+                    <p:dialog header="Registrar Ticket" widgetVar="regTTDialog" resizable="false" id="dlgRegTT"  style="font-family: Segoe UI Light;"
+                              showEffect="fade" hideEffect="explode" modal="true">  
+
+                        <h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">                           
+
+                            <h:outputText value="Farmacia *" />  
+                            <p:selectOneMenu value="#{ticketBean.fkIdFarmacia}" 
+                                             effect="fold" required="true" requiredMessage="Elige una farmacia!">  
+                                <f:selectItem itemLabel="Seleccionar" itemValue="" />  
+                                <f:selectItems value="#{farmaciaBean.seleccionarFarmacia}" />  
+                            </p:selectOneMenu>  
+
+                            <h:outputText value="Operador que reporta *" />  
+                            <p:selectOneMenu value="#{ticketBean.usuarioReporte}" 
+                                             effect="fold" required="true" requiredMessage="Ingresa tu número de operador!">  
+                                <f:selectItem itemLabel="Seleccionar" />  
+                                <f:selectItem itemValue="Operador 1" itemLabel="Operador 1" />  
+                                <f:selectItem itemValue="Operador 2" itemLabel="Operador 2" />  
+                                <f:selectItem itemValue="Operador 3" itemLabel="Operador 3" />  
+                                <f:selectItem itemValue="Operador 4" itemLabel="Operador 4" />  
+                                <f:selectItem itemValue="Operador 5" itemLabel="Operador 5" />  
+                            </p:selectOneMenu> 
+
+                            <h:outputText value="Estado *" />  
+                            <p:selectOneMenu value="#{ticketBean.estado}" 
+                                             effect="fold" required="true" requiredMessage="Ingresa tu número de operador!">  
+                                <f:selectItem itemLabel="Seleccionar" />  
+                                <f:selectItem itemValue="True" itemLabel="True" />  
+                                <f:selectItem itemValue="False" itemLabel="False" />   
+                            </p:selectOneMenu>   
+
+                            <h:outputText value="Fecha de Apertura" />  
+                            <p:calendar value="#{ticketBean.fechaReporte}" 
+                                        pattern="yyyy-MM-dd HH:mm"
+                                        required="true" effect="slide"
+                                        requiredMessage="Fecha de apertura requerida!"/> 
+
+
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnConfirmRegTT" update=":formTickets, :msgs" 
+                                                 icon="ui-icon-disk" 
+                                                 actionListener="#{ticketBean.registroAutoTT(actionEvent)}"
+                                                 oncomplete="PF('regTTDialog').hide()"
+                                                 title="Guardar" value="Guardar"
+                                                 />
+                                <p:commandButton id="btnCancelRegTT" oncomplete="PF('regTTDialog').hide()"
+                                                 icon="ui-icon-close" title="Cerrar" value="Cerrar"/>
+                                <h:outputLabel> * Campos requeridos</h:outputLabel>
+                            </f:facet>
+                        </h:panelGrid>  
+
+                    </p:dialog>  
+                </h:form>  
+
+
+                <h:form id="formActualizarTT"> 
+                    <p:dialog header="Actualizar Ticket" widgetVar="actTTDialog" resizable="false" id="dlgActTT"  style="font-family: Segoe UI;"
+                              showEffect="fade" hideEffect="explode" modal="true">  
+
+                        <h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">                           
+
+                            <h:outputText value="Id Ticket " />  
+                            <p:inputText value="#{ticketBean.ticketSeleccionado.ttIdTicket}"/>  
+
+                            <h:outputText value="Observaciones " />  
+                            <p:inputTextarea rows="4" cols="20"
+                                             value="#{ticketBean.ticketSeleccionado.ttObservaciones}"/> 
+
+                            <h:outputText value="Número de TT *" />  
+                            <p:inputText value="#{ticketBean.ticketSeleccionado.ttNumeroTicket}"
+                                         required="true"
+                                         requiredMessage="Se requiere el número de Ticket!"/>  
+
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnConfirmActTT" update=":formTickets, :msgs" 
+                                                 icon="ui-icon-disk" 
+                                                 actionListener="#{ticketBean.btnActualizarTicket(actionEvent)}"
+                                                 oncomplete="PF('actTTDialog').hide()"
+                                                 title="Guardar" value="Guardar"
+                                                 />
+                                <p:commandButton id="btnCancelActTT" oncomplete="PF('actTTDialog').hide()"
+                                                 icon="ui-icon-close" title="Cerrar" value="Cerrar"/>
+                                <h:outputLabel> * Campos requeridos</h:outputLabel>
+                            </f:facet>
+                        </h:panelGrid>  
+
+                    </p:dialog>  
+                </h:form>  
+
+
+                <h:form id="formEliminarTT">      
+                    <p:confirmDialog id="confirmDialog" widgetVar="elimTTDialog" style="font-family: Segoe UI;"
+                                     message="¿Eliminar Ticket #{ticketBean.ticketSeleccionado.ttIdTicket}?" 
+                                     showEffect="fade" hideEffect="explode"
+                                     header="Eliminar Ticket" severity="alert">
+                        <h:inputHidden value="#{ticketBean.ticketSeleccionado.ttIdTicket}"/>                       
+                        <p:commandButton id="confirmElimTT" value="Aceptar" update=":formTickets, :msgs" style="alignment-adjust: middle"                                       
+                                         actionListener="#{ticketBean.btnEliminarTicket(actionEvent)}"
+                                         oncomplete="PF('elimTTDialog').hide()"
+                                         icon="ui-icon-check"/>
+                        <p:commandButton id="btnCancelElimTT" oncomplete="PF('elimTTDialog').hide()" 
+                                         icon="ui-icon-close" title="Cancelar" value="Cancelar"/>
+
+                    </p:confirmDialog>
+                </h:form>       
+
+
+                <h:form id="formCerrarTT">      
+                    <p:confirmDialog id="confirmDialog" widgetVar="cerrarTTDialog" style="font-family: Segoe UI;"
+                                     message="¿Cerrar el Ticket #{ticketBean.ticketSeleccionado.ttNumeroTicket}?" 
+                                     showEffect="fade" hideEffect="explode"
+                                     header="Cerrar Ticket" severity="alert">
+                        <h:inputHidden value="#{ticketBean.ticketSeleccionado.ttIdTicket}"/>                       
+                        <p:commandButton id="confirmCerrarTT" value="Aceptar" update=":formTickets, :msgs" style="alignment-adjust: middle"                                       
+                                         actionListener="#{ticketBean.btnCerrarTicket(actionEvent)}"
+                                         oncomplete="PF('cerrarTTDialog').hide()"
+                                         icon="ui-icon-check"/>
+                        <p:commandButton id="btnCancelCerrarTT" oncomplete="PF('cerrarTTDialog').hide()" 
+                                         icon="ui-icon-close" title="Cancelar" value="Cancelar"/>
+
+                    </p:confirmDialog>
+                </h:form>       
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
