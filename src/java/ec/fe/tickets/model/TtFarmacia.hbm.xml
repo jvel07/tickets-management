@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 17, 2015 5:12:38 PM by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="ec.fe.tickets.model.TtFarmacia" table="TT_Farmacia" schema="dbo" catalog="Tickets">
+        <id name="farIdFarmacia" type="string">
+            <column name="far_id_farmacia" length="300" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="ttProveedor" class="ec.fe.tickets.model.TtProveedor" fetch="select">
+            <column name="far_fk_id_proveedor" length="50" />
+        </many-to-one>
+        <property name="farPiloto" type="string">
+            <column name="far_piloto" length="300" />
+        </property>
+        <property name="farTelfConvencional" type="string">
+            <column name="far_telf_convencional" length="300" not-null="true" />
+        </property>
+        <property name="farTelfCelular" type="string">
+            <column name="far_telf_celular" length="300" />
+        </property>
+        <property name="farIp" type="string">
+            <column name="far_ip" length="15" />
+        </property>
+        <property name="farEstado" type="java.lang.Boolean">
+            <column name="far_estado" />
+        </property>
+        <property name="farDireccion" type="string">
+            <column name="far_direccion" length="300" />
+        </property>
+        <property name="farCoordenadas" type="string">
+            <column name="far_coordenadas" length="300" />
+        </property>
+        <property name="farMedio" type="string">
+            <column name="far_medio" length="300" />
+        </property>
+        <property name="farVelocidad" type="string">
+            <column name="far_velocidad" length="300" />
+        </property>
+        <property name="farCosto" type="string">
+            <column name="far_costo" length="300" />
+        </property>
+        <property name="farEsFranquicia" type="string">
+            <column name="far_es_franquicia" length="300" />
+        </property>
+        <property name="farFranquiciado" type="string">
+            <column name="far_franquiciado" length="300" />
+        </property>
+        <property name="farNumBodega" type="string">
+            <column name="far_num_bodega" length="300" />
+        </property>
+        <property name="farCentroCosto" type="java.lang.Integer">
+            <column name="far_centro_costo" />
+        </property>
+        <property name="farOficina" type="java.lang.Integer">
+            <column name="far_oficina" />
+        </property>
+        <property name="farCiudad" type="string">
+            <column name="far_ciudad" length="300" />
+        </property>
+        <set name="ttTickets" table="TT_Ticket" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="tt_fk_id_farmacia" length="300" />
+            </key>
+            <one-to-many class="ec.fe.tickets.model.TtTicket" />
+        </set>
+    </class>
+</hibernate-mapping>

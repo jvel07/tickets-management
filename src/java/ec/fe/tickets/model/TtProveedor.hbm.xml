@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 17, 2015 5:12:38 PM by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="ec.fe.tickets.model.TtProveedor" table="TT_Proveedor" schema="dbo" catalog="Tickets">
+        <id name="proIdProveedor" type="string">
+            <column name="pro_id_proveedor" length="50" />
+            <generator class="assigned" />
+        </id>
+        <property name="proContacto1" type="string">
+            <column name="pro_contacto1" length="100" not-null="true" />
+        </property>
+        <property name="proContacto2" type="string">
+            <column name="pro_contacto2" length="50" />
+        </property>
+        <property name="proCorreo" type="string">
+            <column name="pro_correo" length="100" not-null="true" />
+        </property>
+        <property name="proEscalamiento1" type="string">
+            <column name="pro_escalamiento1" length="300" not-null="true" />
+        </property>
+        <property name="proEscalamiento2" type="string">
+            <column name="pro_escalamiento2" length="300" />
+        </property>
+        <property name="proEscalamiento3" type="string">
+            <column name="pro_escalamiento3" length="300" />
+        </property>
+        <property name="proEscalamiento4" type="string">
+            <column name="pro_escalamiento4" length="300" />
+        </property>
+        <set name="ttFarmacias" table="TT_Farmacia" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="far_fk_id_proveedor" length="50" />
+            </key>
+            <one-to-many class="ec.fe.tickets.model.TtFarmacia" />
+        </set>
+    </class>
+</hibernate-mapping>
