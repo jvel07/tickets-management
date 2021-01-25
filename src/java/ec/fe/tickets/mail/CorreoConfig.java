@@ -37,8 +37,8 @@ public class CorreoConfig {
         Session session = Session.getInstance(props, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                String username = "sistemaenlaces@farmaenlace.com";
-                String password = "1234567";
+                String username = "asd@dsad.com";
+                String password = "xxxxx";
                 return new PasswordAuthentication(username, password);
             }
         });
